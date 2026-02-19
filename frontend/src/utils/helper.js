@@ -9,3 +9,9 @@ export const validatePassword = (password) => {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     return regex.test(password)
 }
+
+// Regex for validate Names
+export const validateName = (name) => {
+    const regex = /^[a-zA-Z ]{3,}$/
+    return regex.test(name)
+}

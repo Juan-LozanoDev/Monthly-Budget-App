@@ -29,7 +29,7 @@ const Login = () => {
 
     return (
         <main className="flex md:flex-row flex-col items-center justify-between h-dvh gap-1">
-            <section className="dark m-auto flex flex-col gap-3 px-4 md:max-w-lg md:w-1/2 ">
+            <section className="dark m-auto flex flex-col gap-3 p-4 md:max-w-lg md:w-1/2 bg-white rounded-xl shadow">
                 <h3>Welcome Back</h3>
                 <p className="text-blue-400 text-lg italic">Please enter your details to access you dashboard</p>
                 <form>
@@ -51,7 +51,7 @@ const Login = () => {
                     />
 
                     {error ? <p className="text-rose-400">{error}</p> : <></>}
-                    <button className="w-full py-3 bg-blue-600 text-zinc-200 font-bold rounded-md my-6 cursor-pointer hover:bg-blue-600/90 transition-colors ease-in-out" onClick={handleLogin}>Sign In</button>
+                    <button className="w-full py-3 bg-blue-600 text-zinc-200 font-bold rounded-md my-6 cursor-pointer hover:bg-blue-600/90 transition-colors ease-in-out shadow-md shadow-gray-400" onClick={handleLogin}>Sign In</button>
                 </form>
                 <p className="text-center">
                     Don't have an account?{" "}

@@ -10,7 +10,7 @@ const Input = ({ value, type, placeholder, onChange, label, name }) => {
     };
 
     return (
-        <div className="py-5">
+        <div className="py-3 md:py-5">
             <div className="font-bold my-1">
                 <label htmlFor={name}>{label}</label>
             </div>
@@ -21,7 +21,7 @@ const Input = ({ value, type, placeholder, onChange, label, name }) => {
                     value={value}
                     placeholder={placeholder}
                     onChange={(e) => onChange(e)}
-                    className="bg-gray-200 w-full px-3 py-3 rounded-md border-none focus:outline-1 focus:outline-gray-300"
+                    className="bg-zinc-100 w-full px-3 py-3 rounded-md border-none focus:outline-1 focus:outline-gray-300 placeholder:text-gray-500/40 shadow"
                 />
 
                 {type == "password" ? (
