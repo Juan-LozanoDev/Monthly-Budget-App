@@ -38,4 +38,16 @@ const requestAccount = (email, callback) => {
         });
 };
 
-module.exports = { createUser, verifyEmail, requestAccount};
+// Query for obtain the information of the user
+const requestInfo = (id, callback) => {
+    const sql = "SELECT user_id, full_name, email, profile_image FROM users WHERE user_id = $1 LIMIT 1";
+    db.oneOrNone(sql, [id])
+        .then((result) => {
+            callback(null, result);
+        })
+        .catch((error) => {
+            callback(error);
+        });
+};
+
+module.exports = { createUser, verifyEmail, requestAccount, requestInfo};

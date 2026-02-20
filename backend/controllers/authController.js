@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { createUser, verifyEmail, requestAccount } = require("../models/User");
+const { createUser, verifyEmail, requestAccount, requestInfo } = require("../models/User");
 
 // Create token with JWT
 const createToken = (id) => {
-    let token = jwt.sign({ id: id }, process.env.SECRET_KEY, { expiresIn: "2h" });
+    let token = jwt.sign({ id: id }, process.env.JWT_SECRET, { expiresIn: "2h" });
     return token;
 };
 
@@ -41,15 +41,16 @@ const registerUser = async (req, res) => {
             if (err) return res.status(400).json({ error: err });
 
             let token = createToken(result.user_id);
+            const { user_id, full_name, email } = result;
 
             return res
-                .cookie("access_token", token, {
+                .cookie("token", token, {
                     httpOnly: true, // Cookie can only be accessed from the server
                     secure: process.env.NODE_ENV === "production", // Cookie can only be accessed from https
                     sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // Cookie can't be accessed from different domains
                     maxAge: 1000 * 60 * 60 * 2, // Cookie has 2 valid hours, same as token
                 })
-                .send({ authenticated: true });
+                .send({ user: { id: user_id, name: full_name, email: email }, authenticated: true });
         });
     } catch (err) {
         res.status(500).json({ message: "Error registering the user", error: err });
@@ -65,28 +66,29 @@ const loginUser = async (req, res) => {
     }
 
     try {
-        requestAccount(Email, (err, result) => {
+        requestAccount(Email, (err, user) => {
             if (err) return res.status(400).json({ error: err });
-            if (!result) return res.status(404).json({ message: "Not account is register with this email" });
+            if (!user) return res.status(404).json({ message: "Not account is register with this email" });
 
-            bcrypt.compare(Password, result.hash, (err, result) => {
+            bcrypt.compare(Password, user.hash, (err, result) => {
                 if (err)
                     return res
                         .status(404)
-                        .json({ message: "There has been an error validatin the password, try later" });
+                        .json({ message: "There has been an error validating the password, try later" });
 
                 if (!result) return res.status(401).json({ message: "The password is invalid, please, try again" });
 
-                let token = createToken(result.user_id);
+                let token = createToken(user.user_id);
+                const { user_id, full_name, email } = user;
 
                 return res
-                    .cookie("access_token", token, {
+                    .cookie("token", token, {
                         httpOnly: true, // Cookie can only be accessed from the server
                         secure: process.env.NODE_ENV === "production", // Cookie can only be accessed from https
                         sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // Cookie can't be accessed from different domains
                         maxAge: 1000 * 60 * 60 * 2, // Cookie has 2 valid hours, same as token
                     })
-                    .send({ authenticated: true });
+                    .send({ user: { id: user_id, name: full_name, email: email }, authenticated: true });
             });
         });
     } catch (err) {
@@ -95,6 +97,17 @@ const loginUser = async (req, res) => {
 };
 
 // Get information of the user
-const getUserInfo = async (req, res) => {};
+const getUserInfo = async (req, res) => {
+    try {
+        requestInfo(req.user.id, (err, result) => {
+            if (err) return res.status(400).json({ error: err });
+            if (!result) return res.status(404).json({ message: "User not found" });
+
+            return res.status(200).json(result);
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Error getting the user info, try later", error: err });
+    }
+};
 
 module.exports = { registerUser, loginUser, getUserInfo };
