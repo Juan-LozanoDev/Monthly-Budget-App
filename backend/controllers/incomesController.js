@@ -48,12 +48,12 @@ const modifyIncome = (req, res) => {
     if (!userId) return res.status(401).json({ message: "Not authorized, no token" });
     if (!incomeId) return res.status(404).json({ message: "Not income founded" });
     if (!category || !amount || !date) return res.status(400).json({ message: "The fields are required" });
-    if (isNaN(amount) || amount <= 0) return res.status(400).json({ message: "The amount have to be a integer" });
+    if (typeof amount !== 'number' || amount <= 0) return res.status(400).json({ message: "The amount have to be a integer" });
 
     try {
-        const income = { user_id: userId, category: category, income: amount, income_date: date };
-        editIncome(income, incomeId, (err, result) => {
-            if (err) return res.status(400).json({ error: err });
+        const income = { category: category, income: amount, income_date: date };
+        editIncome(income, incomeId, userId, (err, result) => {
+            if (err) return res.status(400).json({ message: "You are not allowed to do that" });
             if (!result) return res.status(400).json({ message: "Something happen, unable to create the income" });
 
             return res.status(200).json(result);

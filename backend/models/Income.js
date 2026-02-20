@@ -30,13 +30,13 @@ const createIncome = (income, callback) => {
 };
 
 // Query for modify an income
-const editIncome = (income, id, callback) => {
+const editIncome = (income, id, userid, callback) => {
     const keys = Object.keys(income);
     const properties = keys.map((key, index) => `${key} = $${index + 1}`).join(",");
     const values = keys.map((key) => income[key]);
 
-    const sql = `UPDATE incomes SET ${properties} WHERE incomes_id = $${keys.length + 1}  returning *`;
-    db.one(sql, [...income, id])
+    const sql = `UPDATE incomes SET ${properties} WHERE incomes_id = $${keys.length + 1} AND user_id = $${keys.length + 2} returning *`;
+    db.one(sql, [...values, id, userid])
         .then((result) => {
             callback(null, result);
         })
