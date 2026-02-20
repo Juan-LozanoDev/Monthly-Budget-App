@@ -12,6 +12,6 @@ export const validatePassword = (password) => {
 
 // Regex for validate Names
 export const validateName = (name) => {
-    const regex = /^[a-zA-Z ]{3,}$/
+    const regex = /^[a-zA-ZñÑ ]{3,50}$/
     return regex.test(name)
 }
