@@ -38,6 +38,12 @@ const requestAccount = (email, callback) => {
         });
 };
 
+// Query for updating last connection of the user
+const updateConnection = (id, callback) => {
+    const sql = `UPDATE users SET last_connection = CURRENT_TIMESTAMP WHERE user_id = $1`
+    db.none(sql, [id])
+}
+
 // Query for obtain the information of the user
 const requestInfo = (id, callback) => {
     const sql = "SELECT user_id, full_name, email, profile_image FROM users WHERE user_id = $1 LIMIT 1";
@@ -50,4 +56,4 @@ const requestInfo = (id, callback) => {
         });
 };
 
-module.exports = { createUser, verifyEmail, requestAccount, requestInfo};
+module.exports = { createUser, verifyEmail, requestAccount, updateConnection, requestInfo};

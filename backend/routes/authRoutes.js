@@ -5,6 +5,7 @@ const validateFields = require("../middlewares/validateFields");
 const validateAuth = require("../middlewares/validateAuth");
 const router = express.Router();
 
+// Route for sign up users
 router.post(
     "/signup",
     body("Fullname")
@@ -18,6 +19,7 @@ router.post(
     registerUser,
 );
 
+// Route for login users
 router.post(
     "/login",
     body("Email").notEmpty().isEmail(),
@@ -28,6 +30,7 @@ router.post(
     loginUser,
 );
 
+// Route for obtain all the user information
 router.get("/getUser", validateAuth, getUserInfo);
 
 module.exports = router;

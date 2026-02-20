@@ -5,7 +5,7 @@ const { validationResult } = require("express-validator");
 
     // Return error 400 if the requests is not valid
     if (!errors.isEmpty()) {
-        return res.status(400).json({ error: errors.array() });
+        return res.status(400).json({ message: "Please, validate the fields" });
     }
 
     next();
