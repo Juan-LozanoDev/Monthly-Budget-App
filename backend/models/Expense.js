@@ -2,7 +2,7 @@ const db = require("../config/db/db");
 
 // Query for obtain all expenses
 const requestExpenses = (id, callback) => {
-    const sql = `SELECT user_id FROM users AS u WHERE user_id = $1 JOIN expenses AS e ON u.user_id = e.user_id`;
+    const sql = `SELECT expenses_id, category, expense, expense_date FROM expenses WHERE user_id = $1`;
     db.any(sql, [id])
         .then((result) => {
             callback(null, result);
@@ -19,7 +19,7 @@ const createExpense = (expense, callback) => {
     const placeholders = keys.map((key, index) => `$${index + 1}`).join(",");
     const values = keys.map((key) => expense[key]);
 
-    const sql = `INSERT INTO expenses(${properties}) VALUES ${placeholders} returning *`;
+    const sql = `INSERT INTO expenses(${properties}) VALUES (${placeholders}) returning *`;
     db.one(sql, values)
         .then((result) => {
             callback(null, result);
@@ -30,13 +30,13 @@ const createExpense = (expense, callback) => {
 };
 
 // Query for modify an expense
-const editExpense = (expense, id, callback) => {
+const editExpense = (expense, id, userid, callback) => {
     const keys = Object.keys(expense);
     const properties = keys.map((key, index) => `${key} = $${index + 1}`).join(",");
     const values = keys.map((key) => expense[key]);
 
-    const sql = `UPDATE expenses SET ${properties} WHERE expense_id = $${keys.length + 1}  returning *`;
-    db.one(sql, [...expense, id])
+    const sql = `UPDATE expenses SET ${properties} WHERE expenses_id = $${keys.length + 1} AND user_id = $${keys.length + 2} returning *`;
+    db.one(sql, [...values, id, userid])
         .then((result) => {
             callback(null, result);
         })
@@ -46,9 +46,9 @@ const editExpense = (expense, id, callback) => {
 };
 
 // Query for delete an expense
-const removeExpense = (id, callback) => {
-    const sql = `DELETE FROM expenses WHERE expense_id = $1`;
-    db.none(sql, [id])
+const removeExpense = (expenseId, userId, callback) => {
+    const sql = `DELETE FROM expenses WHERE expenses_id = $1 AND user_id = $2 returning expenses_id`;
+    db.oneOrNone(sql, [expenseId, userId])
         .then((result) => {
             callback(null, result);
         })
@@ -56,5 +56,6 @@ const removeExpense = (id, callback) => {
             callback(error);
         });
 };
+
 
 module.exports = { requestExpenses, createExpense, editExpense, removeExpense };

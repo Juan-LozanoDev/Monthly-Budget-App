@@ -46,9 +46,9 @@ const editIncome = (income, id, userid, callback) => {
 };
 
 // Query for delete an income
-const removeIncome = (id, callback) => {
-    const sql = `DELETE FROM incomes WHERE income_id = $1`;
-    db.none(sql, [id])
+const removeIncome = (incomeId, userId, callback) => {
+    const sql = `DELETE FROM incomes WHERE incomes_id = $1 AND user_id = $2 returning incomes_id`;
+    db.oneOrNone(sql, [incomeId, userId])
         .then((result) => {
             callback(null, result);
         })

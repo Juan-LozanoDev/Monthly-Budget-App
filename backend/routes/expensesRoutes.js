@@ -7,12 +7,12 @@ const { getExpenses, addExpense, modifyExpense, deleteExpense } = require("../co
 router.get("/getExpenses", validateAuth, getExpenses);
 
 // Route for post an income
-router.post("/addExpenses", validateAuth, addExpense);
+router.post("/addExpense", validateAuth, addExpense);
 
 // Route for modify an income
-router.put("/modifyExpenses", validateAuth, modifyExpense);
+router.put("/modifyExpense", validateAuth, modifyExpense);
 
 // Route for delete an income
-router.delete("/deleteExpenses", validateAuth, deleteExpense);
+router.delete("/deleteExpense", validateAuth, deleteExpense);
 
 module.exports = router
