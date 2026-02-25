@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Input from "../../components/auth/Input";
 import { validateEmail, validateName, validatePassword } from "../../utils/helper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { API_ROUTES } from "../../utils/apiRoutes";
+import { UserContext } from "../../context/userContext";
 
 const Signup = () => {
     const [fullname, setFullName] = useState("");
@@ -9,8 +11,11 @@ const Signup = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+    const { updateUser } = useContext(UserContext);
 
-    const handleSignUp = (e) => {
+    const navigate = useNavigate();
+
+    const handleSignUp = async (e) => {
         e.preventDefault();
 
         if (!validateName(fullname)) {
@@ -37,6 +42,31 @@ const Signup = () => {
 
         // Validation successfully
         // API CALL SIGN UP
+
+        try {
+            const response = await fetch(`http://localhost:8000${API_ROUTES.AUTH.REGISTER}`, {
+                method: "POST",
+                body: JSON.stringify({ Fullname: fullname, Email: email, Password: password }),
+                headers: { "content-type": "application/json; charset=UTF-8" },
+                credentials: "include",
+            });
+
+            if (response.status !== 200) {
+                const message = await response.json();
+                setError(message);
+                return;
+            }
+
+            const { authenticated, user } = await response.json();
+
+            if (user) {
+                localStorage.setItem("autheticated", authenticated);
+                updateUser(user);
+                navigate("/dashboard");
+            }
+        } catch (error) {
+            setError(error);
+        }
     };
 
     return (

@@ -14,7 +14,7 @@ app.use(helmet());
 // Cors: Allow request from domain
 app.use(
     cors({
-        origin: "http://localhost:8000", // Define domain
+        origin: "http://localhost:5173", // Define domain
         methods: "GET, POST, PUT, DELETE",
         allowedHeaders: ["Content-Type", "Authorization"],
         credentials: true,

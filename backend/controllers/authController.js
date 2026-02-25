@@ -76,7 +76,7 @@ const loginUser = async (req, res) => {
 
     try {
         requestAccount(Email, (err, user) => {
-            if (err) return res.status(400).json({ error: err });
+            if (err) return res.status(400).json({ message: "Something happened on the database, please try later" });
             if (!user) return res.status(404).json({ message: "Not account is register with this email" });
 
             bcrypt.compare(Password, user.hash, (err, result) => {
@@ -100,7 +100,7 @@ const loginUser = async (req, res) => {
                         sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // Cookie can't be accessed from different domains
                         maxAge: 1000 * 60 * 60 * 2, // Cookie has 2 valid hours, same as token
                     })
-                    .send({
+                    .json({
                         user: {
                             id: user_id,
                             name: full_name,
@@ -113,7 +113,7 @@ const loginUser = async (req, res) => {
             });
         });
     } catch (err) {
-        res.status(500).json({ message: "Error accessing to the account, try later", error: err });
+        res.status(500).json({ message: "Error accessing to the account, try later" });
     }
 };
 
@@ -121,13 +121,13 @@ const loginUser = async (req, res) => {
 const getUserInfo = async (req, res) => {
     try {
         requestInfo(req.user.id, (err, result) => {
-            if (err) return res.status(400).json({ error: err });
+            if (err) return res.status(400).json({ message: "Something happened on the database, please try later" });
             if (!result) return res.status(404).json({ message: "User not found" });
 
             return res.status(200).json(result);
         });
     } catch (err) {
-        res.status(500).json({ message: "Error getting the user info, try later", error: err });
+        res.status(500).json({ message: "Error getting the user info, try later"});
     }
 };
 
