@@ -61,7 +61,7 @@ const Signup = () => {
             const { authenticated, user } = await response.json();
 
             if (user) {
-                localStorage.setItem("autheticated", authenticated);
+                localStorage.setItem("authenticated", authenticated);
                 updateUser(user);
                 navigate("/dashboard");
             }

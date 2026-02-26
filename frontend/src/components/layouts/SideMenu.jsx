@@ -14,11 +14,19 @@ const SideMenu = ({ activeMenu }) => {
         if (user) return;
 
         const fetchUserData = async () => {
+            if (!localStorage.getItem("authenticated")) return;
+
             try {
                 const response = await fetch(`http://localhost:8000${API_ROUTES.AUTH.GET_USER}`, {
                     credentials: "include",
                 });
                 const userData = await response.json();
+
+                if (response.status === 400 || response.status === 500) {
+                    localStorage.setItem("authenticated", userData.authenticated);
+                    throw new Error("User no authenticated");
+                }
+
                 updateUser(userData.user);
             } catch (error) {
                 console.error("Something happened, failed to fetch", error);

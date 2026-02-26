@@ -13,6 +13,7 @@ const UserProvider = ({ children }) => {
     // Method for clear user information
     const clearUser = () => {
         setUser(null);
+        localStorage.removeItem("authenticated")
     };
 
     return <UserContext.Provider value={{ user, setUser, updateUser, clearUser }}>{children}</UserContext.Provider>;
