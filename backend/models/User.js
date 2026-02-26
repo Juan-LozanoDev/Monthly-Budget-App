@@ -28,7 +28,7 @@ const createUser = (user, callback) => {
 
 // Query for login the user
 const requestAccount = (email, callback) => {
-    const sql = "SELECT * FROM users WHERE email = $1 LIMIT 1";
+    const sql = "SELECT user_id, full_name, email, profile_image, last_connection FROM users WHERE email = $1 LIMIT 1";
     db.oneOrNone(sql, [email])
         .then((result) => {
             callback(null, result);
@@ -46,7 +46,7 @@ const updateConnection = (id) => {
 
 // Query for obtain the information of the user
 const requestInfo = (id, callback) => {
-    const sql = "SELECT user_id, full_name, email, profile_image FROM users WHERE user_id = $1 LIMIT 1";
+    const sql = "SELECT user_id, full_name, email, profile_image, last_connection FROM users WHERE user_id = $1 LIMIT 1";
     db.oneOrNone(sql, [id])
         .then((result) => {
             callback(null, result);

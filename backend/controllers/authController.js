@@ -52,7 +52,7 @@ const registerUser = async (req, res) => {
                 })
                 .send({
                     user: {
-                        id: user_id,
+                        user_id: user_id,
                         name: full_name,
                         email: email,
                         profile_url: profile_image,
@@ -102,7 +102,7 @@ const loginUser = async (req, res) => {
                     })
                     .json({
                         user: {
-                            id: user_id,
+                            user_id: user_id,
                             name: full_name,
                             email: email,
                             profile_url: profile_image,
@@ -124,10 +124,20 @@ const getUserInfo = async (req, res) => {
             if (err) return res.status(400).json({ message: "Something happened on the database, please try later" });
             if (!result) return res.status(404).json({ message: "User not found" });
 
-            return res.status(200).json(result);
+            const { user_id, full_name, email, profile_image, last_connection } = result;
+
+            return res.status(200).json({
+                user: {
+                    user_id: user_id,
+                    name: full_name,
+                    email: email,
+                    profile_url: profile_image,
+                    last_connection: last_connection,
+                },
+            });
         });
     } catch (err) {
-        res.status(500).json({ message: "Error getting the user info, try later"});
+        res.status(500).json({ message: "Error getting the user info, try later" });
     }
 };
 

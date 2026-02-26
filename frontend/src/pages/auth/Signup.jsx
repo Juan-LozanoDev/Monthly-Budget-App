@@ -3,7 +3,7 @@ import Input from "../../components/auth/Input";
 import { validateEmail, validateName, validatePassword } from "../../utils/helper";
 import { Link, useNavigate } from "react-router-dom";
 import { API_ROUTES } from "../../utils/apiRoutes";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
 
 const Signup = () => {
     const [fullname, setFullName] = useState("");
@@ -12,6 +12,7 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const { updateUser } = useContext(UserContext);
+
 
     const navigate = useNavigate();
 

@@ -3,13 +3,15 @@ import Input from "../../components/auth/Input";
 import { useContext, useState } from "react";
 import { validateEmail, validatePassword } from "../../utils/helper";
 import { API_ROUTES } from "../../utils/apiRoutes";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../../context/UserContext";
+
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const { updateUser } = useContext(UserContext);
+    
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {

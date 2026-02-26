@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Icons } from "../../Icons/Icons";
+import { useContext, useState } from "react";
 import SideMenu from "./SideMenu";
+import { UserContext } from "../../context/UserContext";
+import { getInitials } from "../../utils/helper";
 
-const Navbar = () => {
+const Navbar = ({ activeMenu }) => {
     const [openMenu, setOpenMenu] = useState(false);
+    const { user } = useContext(UserContext);
 
     return (
         <>
@@ -28,9 +30,17 @@ const Navbar = () => {
                 <div className="flex-2">
                     <h4>Pay Wise</h4>
                 </div>
-                <div className="">PROFILE</div>
+                <div className="rounded-full bg-zinc-200 w-12 h-12 flex justify-center items-center mx-auto shadow-xl">
+                    <p className="italic font-bold text-md text-zinc-500">{getInitials(user?.name)}</p>
+                </div>
             </header>
-            {openMenu ? <SideMenu /> : <></>}
+            {openMenu ? (
+                <aside className="block md:hidden">
+                    <SideMenu activeMenu={activeMenu} />
+                </aside>
+            ) : (
+                <></>
+            )}
         </>
     );
 };

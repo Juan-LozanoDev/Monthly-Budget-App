@@ -1,11 +1,14 @@
 import Navbar from "./Navbar";
 import SideMenu from "./SideMenu";
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ activeMenu }) => {
     return (
         <>
-            <Navbar />
-            <SideMenu />
+            <Navbar activeMenu={activeMenu} />
+            <aside className="hidden md:block">
+                <SideMenu activeMenu={activeMenu} />
+            </aside>
+            
         </>
     );
 };
