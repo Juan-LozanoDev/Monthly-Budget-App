@@ -58,5 +58,3 @@ const removeIncome = (incomeId, userId, callback) => {
 };
 
 module.exports = { requestIncomes, createIncome, editIncome, removeIncome };
-
-const info = { user_id: "1", category: "perro", income: 1230, income_date: "date" };

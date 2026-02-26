@@ -57,5 +57,4 @@ const removeExpense = (expenseId, userId, callback) => {
         });
 };
 
-
 module.exports = { requestExpenses, createExpense, editExpense, removeExpense };

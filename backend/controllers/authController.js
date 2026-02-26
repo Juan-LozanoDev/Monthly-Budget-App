@@ -83,7 +83,7 @@ const loginUser = async (req, res) => {
                 if (err)
                     return res
                         .status(404)
-                        .json({ message: "There has been an error validating the password, try later" });
+                        .json({ message: "There has been an error validating the password, try later"});
 
                 if (!result) return res.status(401).json({ message: "The password is invalid, please, try again" });
 

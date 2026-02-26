@@ -25,6 +25,7 @@ const authRoutes = require("./routes/authRoutes");
 const incomesRoutes = require("./routes/incomesRoutes");
 const expensesRoutes = require("./routes/expensesRoutes");
 const investmentsRoutes = require("./routes/investmentsRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 // Global middlewares
 app.use(logger("dev"));
@@ -44,6 +45,9 @@ app.use("/api/expenses", expensesRoutes);
 
 // Investments Route
 app.use("/api/investments", investmentsRoutes);
+
+// Dashboard Route
+app.use("/api/dashboard", dashboardRoutes)
 
 const port = process.env.PORT || 5000;
 
