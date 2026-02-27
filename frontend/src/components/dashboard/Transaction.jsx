@@ -3,7 +3,7 @@ import { formatDate, thousandSeparator } from "../../utils/helper";
 
 const Transaction = ({ description, amount, date, type }) => {
     return (
-        <div className="py-4 flex gap-8 items-center justify-between">
+        <div className="py-4 flex gap-4 md:gap-8 items-center justify-between">
             <div className="w-12 h-12 bg-zinc-100 rounded-full flex justify-center items-center">ICONO</div>
             <div className="flex-1">
                 <p className="font-semibold">{description}</p>

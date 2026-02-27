@@ -6,6 +6,7 @@ import { API_ROUTES } from "../../utils/apiRoutes";
 import { Icons } from "../../Icons/Icons";
 import InfoCard from "../../components/dashboard/InfoCard";
 import RecentTransactions from "../../components/dashboard/RecentTransactions";
+import BalancePie from "../../components/dashboard/BalancePie";
 
 const Home = () => {
     useUserAuth();
@@ -37,13 +38,39 @@ const Home = () => {
         <DashboardLayout activeMenu={"Dashboard"}>
             <section className="py-5 px-4 flex-1">
                 <div className="mb-5 grid grid-cols-1 md:grid-cols-responsive-300 gap-4">
-                    <InfoCard cardInfo={dashboardData?.totalBalance} type={"Balance"} color={'bg-blue-400'} icon={Icons.balance} />
-                    <InfoCard cardInfo={dashboardData?.totalIncomes} type={"Income"} color={'bg-green-500'} icon={Icons.walletIncome}/>
-                    <InfoCard cardInfo={dashboardData?.totalExpenses} type={"Expense"} color={'bg-red-400'} icon={Icons.receipt}/>
-                    <InfoCard cardInfo={dashboardData?.totalInvestments} type={"Investment"} color={'bg-yellow-400'} icon={Icons.stock}/>
+                    <InfoCard
+                        cardInfo={dashboardData?.totalBalance}
+                        type={"Balance"}
+                        color={"bg-blue-400"}
+                        icon={Icons.balance}
+                    />
+                    <InfoCard
+                        cardInfo={dashboardData?.totalIncomes}
+                        type={"Income"}
+                        color={"bg-green-500"}
+                        icon={Icons.walletIncome}
+                    />
+                    <InfoCard
+                        cardInfo={dashboardData?.totalExpenses}
+                        type={"Expense"}
+                        color={"bg-red-400"}
+                        icon={Icons.receipt}
+                    />
+                    <InfoCard
+                        cardInfo={dashboardData?.totalInvestments}
+                        type={"Investment"}
+                        color={"bg-yellow-400"}
+                        icon={Icons.stock}
+                    />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                    <RecentTransactions transactions={dashboardData?.recentTransactions}/>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <RecentTransactions transactions={dashboardData?.recentTransactions} />
+                    <BalancePie
+                        balance={dashboardData?.totalBalance}
+                        incomes={dashboardData?.totalIncomes}
+                        expenses={dashboardData?.totalExpenses}
+                        investments={dashboardData?.totalInvestments}
+                    />
                 </div>
             </section>
         </DashboardLayout>
