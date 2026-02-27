@@ -22,4 +22,7 @@ export const API_ROUTES = {
         EDIT_INVESTMENT: "/api/expenses/modifyInvestment",
         DELETE_INVESTMENT: "/api/expenses/deleteInvestment",
     },
+    DASHBOARD: {
+        GET_DASHBOARD: "/api/dashboard/data"
+    }
 };

@@ -35,3 +35,18 @@ export const formatHour = (hour) => {
     })
     return date
 }
+
+// Formating date
+export const formatDate = (d) => {
+    const date = new Date(d).toLocaleString('es-CO', {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    })
+    return date
+}
+
+// Formating numbers, thousand separators
+export const thousandSeparator = (number) => {
+    return number?.toLocaleString('en')
+}

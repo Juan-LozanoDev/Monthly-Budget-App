@@ -1,6 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Manrope:wght@200..800&display=swap");
 @import "tailwindcss";
 
+@theme {
+    --font-manrope: "Manrope", sans-serif;
+    --font-geistmono: "Geist Mono", monospace;
+}
+
 @layer base {
+
+    body {
+        font-family: var(--font-manrope)
+    }
+
     h1 {
         @apply text-6xl font-bold;
     }
@@ -10,19 +21,21 @@
     }
 
     h3 {
+        
         @apply text-4xl font-bold;
     }
 
     h4 {
+        
         @apply text-3xl font-bold;
     }
 
     h5 {
-        @apply text-2xl font-bold;
+        @apply text-2xl font-medium;
     }
 
     h6 {
-        @apply text-xl font-bold;
+        @apply text-xl font-medium;
     }
 }
 
@@ -33,3 +46,9 @@
         @slot;
     }
 }
+
+@utility grid-cols-responsive-* {
+    grid-template-columns: repeat(auto-fit, minmax(calc(--value(integer) * 1px), 1fr));
+}
+
+
