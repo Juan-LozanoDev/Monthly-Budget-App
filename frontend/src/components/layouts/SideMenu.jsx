@@ -8,7 +8,7 @@ const SideMenu = ({ activeMenu }) => {
     const { user } = useContext(UserContext);
 
     return (
-        <section className="fixed p-4 bg-zinc-50 w-64 h-[calc(100dvh-80px)] shadow-lg ">
+        <section className="fixed p-4 bg-zinc-50 w-64 h-[calc(100dvh-80px)] shadow-lg z-1">
             <div className="rounded-full bg-zinc-200 w-20 h-20 flex justify-center items-center mx-auto shadow-xl">
                 <p className="italic font-bold text-lg text-zinc-500">{getInitials(user?.name)}</p>
             </div>

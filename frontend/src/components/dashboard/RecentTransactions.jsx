@@ -1,6 +1,16 @@
+import Loading from "./Loading";
 import Transaction from "./Transaction";
 
-const RecentTransactions = ({ transactions }) => {
+const RecentTransactions = ({ transactions, loading }) => {
+    if (loading) {
+        return (
+            <div className="px-4 py-4 md:px-6 bg-zinc-50 shadow-lg shadow-zinc-300 rounded-lg">
+                <h5 className="pb-4 text-slate-500 font-semibold">Recent Transactions</h5>
+                <Loading />
+            </div>
+        );
+    }
+
     return (
         <div className="px-4 py-4 md:px-6 bg-zinc-50 shadow-lg shadow-zinc-300 rounded-lg">
             <h5 className="pb-4 text-slate-500 font-semibold">Recent Transactions</h5>

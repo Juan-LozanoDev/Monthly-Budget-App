@@ -10,7 +10,7 @@ const Navbar = ({ activeMenu }) => {
     return (
         <>
             <header className="w-full h-20">
-                <div className="fixed p-4 flex gap-6 w-full h-20 justify-between items-center bg-zinc-50 shadow-lg shadow-zinc-300">
+                <div className="fixed p-4 flex gap-6 w-full h-20 justify-between items-center bg-zinc-50 shadow-lg shadow-zinc-300 z-1">
                     <button
                         className="block md:hidden cursor-pointer relative w-6 h-10"
                         onClick={() => setOpenMenu(!openMenu)}

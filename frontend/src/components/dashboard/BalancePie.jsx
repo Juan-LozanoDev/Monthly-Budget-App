@@ -1,9 +1,22 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { thousandSeparator } from "../../utils/helper";
+import { useEffect, useRef, useState } from "react";
+import Loading from "./Loading";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
-const BalancePie = ({ balance, incomes, expenses, investments }) => {
+const BalancePie = ({ balance, incomes, expenses, investments, loading }) => {
+    const doughnutRef = useRef(null);
+
+    const [centerY, setCenterY] = useState(0);
+
+    useEffect(() => {
+        if (!doughnutRef.current) return;
+        const height = doughnutRef.current.chartArea.height;
+        setCenterY(height / 2);
+    }, []);
+
     const data = {
         labels: ["Balance", "Incomes", "Expenses", "Investments"],
         datasets: [
@@ -24,18 +37,18 @@ const BalancePie = ({ balance, incomes, expenses, investments }) => {
                 ],
                 borderWidth: 1,
                 borderRadius: 10,
-                hoverOffset: 20,
+                hoverOffset: 10,
                 rotation: 270,
             },
         ],
     };
 
     const options = {
+        cutout: "75%",
+        layout: {
+            padding: 10,
+        },
         plugins: {
-            layout: {
-                padding: 30,
-                autoPadding: false,
-            },
             legend: {
                 position: "bottom",
                 labels: {
@@ -47,24 +60,32 @@ const BalancePie = ({ balance, incomes, expenses, investments }) => {
                     usePointStyle: true,
                 },
             },
-            subtitle: {
-                display: true,
-                text: `Total balance $${balance}`,
-                padding: {
-                    top: 10,
-                    bottom: 30
-                }
-            }
+            centerTitle: {
+                balance: balance,
+            },
         },
     };
+
+    if (loading) {
+        return (
+            <section className="p-4 w-full justify-center items-center bg-zinc-50 shadow-lg shadow-zinc-300 rounded-lg">
+                <h5 className=" text-slate-500 font-semibold">Financial Overview</h5>
+                <Loading />
+            </section>
+        );
+    }
 
     return (
         <section className="p-4 w-full justify-center items-center bg-zinc-50 shadow-lg shadow-zinc-300 rounded-lg">
             <h5 className=" text-slate-500 font-semibold">Financial Overview</h5>
-            <div className="flex justify-center items-center w-full h-full">
-                <Doughnut data={data} options={options} />
+            <div className="flex justify-center items-center w-full h-full relative">
+                <Doughnut data={data} options={options} ref={doughnutRef} />
+                <h5
+                    className={`hidden md:block absolute italic pointer-events-none text-center font-semibold md:top-[calc(50% - ${centerY})] -translate-y-1/2 text-lg md:text-2xl`}
+                >
+                    Total balance: <br />${`${thousandSeparator(balance)}`}
+                </h5>
             </div>
-            
         </section>
     );
 };
