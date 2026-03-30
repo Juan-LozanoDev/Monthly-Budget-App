@@ -2,11 +2,12 @@ const {
     totalExpenses,
     totalIncomes,
     totalInvestments,
-    last60DaysIncomes,
+    last30DaysIncomes,
     last30DaysExpenses,
     allTransactions,
+    currentMonthIncomes,
+    currentMonthExpenses,
 } = require("../models/Dashboard");
-const { getIncomes } = require("./incomesController");
 
 // Function for obtaining the total amount of incomes of the user
 const resultIncomes = (userId) => {
@@ -39,9 +40,9 @@ const resultInvestments = (userId) => {
 };
 
 // Function for obtaining the last 60 days incomes of the user
-const result60DaysIncomes = (userId) => {
+const result30DaysIncomes = (userId) => {
     return new Promise((resolve, reject) => {
-        last60DaysIncomes(userId, (err, result) => {
+        last30DaysIncomes(userId, (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -74,6 +75,30 @@ const last10Transactions = (userId) => {
     });
 };
 
+// Function for obtaining current month incomes of the user
+const monthlyIncomes = (userId) => {
+    return new Promise((resolve, reject) => {
+        currentMonthIncomes(userId, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result ?? []);
+        });
+    });
+};
+
+// Function for obtaining current month expenses of the user
+const monthlyExpenses = (userId) => {
+    return new Promise((resolve, reject) => {
+        currentMonthExpenses(userId, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result ?? []);
+        });
+    });
+};
+
 const getUserDashboard = async (req, res) => {
     const userId = req.user?.id;
 
@@ -81,16 +106,18 @@ const getUserDashboard = async (req, res) => {
         const getTotalIncomes = await resultIncomes(userId);
         const getTotalExpenses = await resultExpenses(userId);
         const getTotalInvestments = await resultInvestments(userId);
-        const getLast60DaysOfIncomes = await result60DaysIncomes(userId);
+        const getLast60DaysOfIncomes = await result30DaysIncomes(userId);
         const getLast30DaysOfExpenses = await result30DaysExpenses(userId);
         const getLast10Transactions = await last10Transactions(userId);
+        const getMonthlyIncomes = await monthlyIncomes(userId);
+        const getMonthlyExpenses = await monthlyExpenses(userId);
 
         return res.status(200).json({
-            totalIncomes: getTotalIncomes,
-            totalExpenses: getTotalExpenses,
-            totalInvestments: getTotalInvestments,
-            totalBalance: getTotalIncomes - getTotalExpenses - getTotalInvestments,
-            last60DaysIncome: {
+            totalIncomes: parseFloat(getTotalIncomes),
+            totalExpenses: parseFloat(getTotalExpenses),
+            totalInvestments: parseFloat(getTotalInvestments),
+            totalBalance: parseFloat(getTotalIncomes) - parseFloat(getTotalExpenses) - parseFloat(getTotalInvestments),
+            last30DaysIncome: {
                 totalIncomes: getLast60DaysOfIncomes?.reduce((total, current) => total + parseFloat(current.income), 0),
                 transactions: getLast60DaysOfIncomes,
             },
@@ -102,6 +129,14 @@ const getUserDashboard = async (req, res) => {
                 transactions: getLast30DaysOfExpenses,
             },
             recentTransactions: getLast10Transactions,
+            monthlyIncomes: {
+                totalIncomes: getMonthlyIncomes?.reduce((total, current) => total + parseFloat(current.income), 0),
+                totalCategoryIncomes: getMonthlyIncomes,
+            },
+            monthlyExpenses: {
+                totalExpenses: getMonthlyExpenses?.reduce((total, current) => total + parseFloat(current.expense), 0),
+                totalCategoryExpenses: getMonthlyExpenses,
+            },
         });
     } catch (error) {
         return res.status(500).json({ message: "Error obtaining the dashboard data" });
